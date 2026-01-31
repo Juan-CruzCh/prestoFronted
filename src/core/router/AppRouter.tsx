@@ -9,6 +9,7 @@ import { pagoRouter } from "../../module/pago/router/router";
 import { usuarioRouter } from "../../module/usuario/router/router";
 import { Menu } from "../components/Menu";
 import { autenticacionRouter } from "../../module/autenticacion/router/router";
+import { dashboardRouter } from "../../module/dashboard/router/dashboardRouter";
 
 const renderRoutes = (routes: RouterI[]) =>
   routes.map((item, index) => (
@@ -35,6 +36,7 @@ export const AppRouter = () => {
 
         {/* Layout */}
         <Route element={<Menu />}>
+          {renderRoutes(dashboardRouter)}
           {renderRoutes(autenticacionRouter)}
           {renderRoutes(tarifaRouter)}
           {renderRoutes(clienteRouter)}

@@ -13,7 +13,6 @@ export interface UsuarioListarI {
   fecha: Date;         
 }
 
-
 export interface UsuarioCrearI {
   ci: string;
   nombre: string;
@@ -38,4 +37,14 @@ export interface UpdateUsuarioI {
   rol: string;
         
 }
-
+export interface UsuarioPerfilI {
+  ci: string;
+  nombre: string;
+  celular: string;
+  apellidoMaterno: string;
+  apellidoPaterno: string;
+  usuario: string;
+  direccion: string;
+  rol: string;
+        
+}

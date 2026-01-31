@@ -1,5 +1,5 @@
 import { instance } from '../../../core/config/instanceAxios';
-import type { UpdateUsuarioI } from '../../usuario/interface/usuario';
+import type {UsuarioPerfilI } from '../../usuario/interface/usuario';
 
 
 export async function login(usuarioInput: string, password: string): Promise<{ token: String }> {
@@ -8,8 +8,8 @@ export async function login(usuarioInput: string, password: string): Promise<{ t
 }
 
 
-export async function verificarLogin(): Promise<any> {
-    const response = await instance.get<UpdateUsuarioI>('verificar/autenticacion');
+export async function verificarLogin(): Promise<UsuarioPerfilI> {
+    const response = await instance.get<UsuarioPerfilI>('verificar/autenticacion');
     return response.data;
 
 }

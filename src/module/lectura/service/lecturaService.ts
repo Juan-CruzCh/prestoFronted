@@ -19,7 +19,7 @@ export async function registrarLectura(data: FormularioLecturaI): Promise<any> {
 }
 
 
-export async function listarLecturas(fechaInicio: string, fechaFin: string): Promise<ListarLecturaMedidorI[]> {
+export async function listarLecturasService(fechaInicio: string, fechaFin: string): Promise<ListarLecturaMedidorI[]> {
   const response = await instance.post<ListarLecturaMedidorI[]>(`lectura/listar`, {
     fechaInicio,
     fechaFin
@@ -33,7 +33,7 @@ export async function detalleLectura(medidor: string, lectura: string): Promise<
   return response.data;
 }
 
-export async function eliminarLectura(id: string): Promise<any> {
+export async function eliminarLecturaService(id: string): Promise<any> {
   const response = await instance.delete<any>(`lectura/${id}`);
   return response.data;
 }

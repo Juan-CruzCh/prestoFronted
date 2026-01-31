@@ -18,7 +18,7 @@ export const LoginPage = () => {
     try {
       const response = await login(data.usuario, data.password)
       if (response.token) {
-
+        
       }
     } catch (error) {
       const e = error as AxiosError<any>

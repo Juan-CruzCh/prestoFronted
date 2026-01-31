@@ -1,23 +1,38 @@
 import { create } from "zustand";
 import { verificarLogin } from "../../module/autenticacion/service/autenticacionService";
+import type { UsuarioPerfilI } from "../../module/usuario/interface/usuario";
 interface AuthStore {
-  user: any | null;
-  loading: boolean;
-  verificarAuth: () => Promise<void>;
+    user: UsuarioPerfilI | null;
+    loading: boolean;
+    isAutenticaicon: boolean;
+    verificarAuth: () => Promise<void>;
 }
-export const useAuthStore  = create<AuthStore>((set)=>({
-    loading:false,
-    user:null,
-
-    verificarAuth : async ()=>{
+export const useAuthStore = create<AuthStore>((set) => ({
+    loading: false,
+    user: {
+        apellidoMaterno: '',
+        apellidoPaterno: '',
+        celular: '',
+        ci: '',
+        direccion: '',
+        nombre: '',
+        rol: '',
+        usuario: ''
+    },
+    isAutenticaicon: false,
+    verificarAuth: async () => {
         try {
             console.log('verificando login');
-            
+
             const response = await verificarLogin()
-            console.log(response);
-               set({ user: response, loading: false })
+            if (response) {
+                set({ user: response, isAutenticaicon: true })
+            }
+
         } catch (error) {
+            console.log(error);
             
+            set({ user: null, isAutenticaicon: false })
         }
 
     }

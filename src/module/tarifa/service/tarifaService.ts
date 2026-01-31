@@ -19,13 +19,13 @@ export async function listarTarifas(): Promise<ListarTarifasI[]> {
 }
 
 
-export async function eliminarTarifa(id: string): Promise<any> {
+export async function eliminarTarifaService(id: string): Promise<any> {
   const response = await instance.delete<any>(`tarifa/${id}`);
   return response.data;
 }
 
 
-export async function eliminarRango(id: string): Promise<any> {
+export async function eliminarRangoService(id: string): Promise<any> {
   const response = await instance.delete<any>(`tarifa/rango/${id}`);
   return response.data;
 }
