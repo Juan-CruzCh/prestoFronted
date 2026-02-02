@@ -15,19 +15,17 @@ import {
   MdSettings,
   MdLogout,
   MdMenu,
-  MdExpandMore,
-  MdExpandLess,
 } from "react-icons/md";
 import { Link, Outlet } from "react-router";
+import { useAuthStore } from "../context/auth";
 
 const cerrarSession = () => console.log("logout");
 
 export const Menu: React.FC = () => {
-  const usuario = {
-    rol: "ADMINISTRADOR",
-    nombre: "Juan",
-    apellidoMaterno: "Mamani",
-  };
+  const {usuario, isAutenticaicon}= useAuthStore()
+  console.log(isAutenticaicon);
+  
+
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({});
@@ -56,7 +54,7 @@ export const Menu: React.FC = () => {
         className={`fixed top-16 left-0 w-64 h-[calc(100%-64px)] bg-white shadow-md flex flex-col transition-transform duration-300 z-50
         ${drawerOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        {/* USER INFO */}
+        { usuario &&  isAutenticaicon &&(
         <div className="flex items-center p-4 border-b bg-white shadow-md rounded-lg hover:bg-gray-50">
           <div className="w-12 h-12 rounded-full flex items-center justify-center text-2xl">👤</div>
           <div className="ml-4">
@@ -67,8 +65,10 @@ export const Menu: React.FC = () => {
               Rol: <span className="font-medium text-gray-700">{usuario.rol}</span>
             </div>
           </div>
-        </div>
-
+        </div>)
+  }
+      {
+        usuario && isAutenticaicon && (
         <nav className="flex-1 overflow-y-auto">
           {(usuario.rol === "ADMINISTRADOR" || usuario.rol === "LECTURADOR") && (
             <Link to="/inicio" className="flex items-center p-3 hover:bg-gray-100">
@@ -162,7 +162,8 @@ export const Menu: React.FC = () => {
             <MdLogout className="text-xl" />
             <span className="ml-2">Cerrar sesión</span>
           </button>
-        </nav>
+        </nav>)
+}
       </aside>
 
       {/* MAIN */}

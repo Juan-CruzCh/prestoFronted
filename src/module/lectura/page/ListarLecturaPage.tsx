@@ -3,6 +3,7 @@ import type { ListarLecturaMedidorI } from "../interface/lectura";
 import { useNavigate } from "react-router";
 import { eliminarLecturaService, listarLecturasService } from "../service/lecturaService";
 import { confirmarEliminar } from "../../../core/utils/alertasUtils";
+import type { AxiosError } from "axios";
 
 
 
@@ -30,9 +31,14 @@ export const ListarLecturasPage = () => {
     const listarLecturasRegistradas = async (inicio = fechaInicio, fin = fechaFin) => {
         try {
             const data = await listarLecturasService(inicio, fin);
+      
+          
             setListarLecturas(data);
             setTotalPaginas(Math.ceil(data.length / 20));
         } catch (err) {
+            const e = err as AxiosError<any>
+            console.log(e.response);
+            
             console.error("Error al listar lecturas", err);
         }
     };
@@ -54,7 +60,7 @@ export const ListarLecturasPage = () => {
     };
 
     return (
-        <div className="overflow-x-auto border rounded-lg p-4">
+        <div className="overflow-x-auto  rounded-lg p-4">
             <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
                 Lecturas de Medidores
             </h2>

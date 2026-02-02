@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { listarClientes as listarClientesService, eliminarCliente as eliminarClienteService } from '../service/clienteService';
 import type { ListarClienteI } from '../interface/cliente';
-import type { ResultadoHttp } from '../../../core/interface/ResultadoHttp';
+
 import { confirmarEliminar } from '../../../core/utils/alertasUtils';
 
 

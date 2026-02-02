@@ -2,17 +2,16 @@ import { create } from "zustand";
 import { verificarLogin } from "../../module/autenticacion/service/autenticacionService";
 import type { UsuarioPerfilI } from "../../module/usuario/interface/usuario";
 interface AuthStore {
-    user: UsuarioPerfilI | null;
+    usuario: UsuarioPerfilI | null;
     loading: boolean;
     isAutenticaicon: boolean;
     verificarAuth: () => Promise<void>;
 }
 export const useAuthStore = create<AuthStore>((set) => ({
     loading: false,
-    user: {
+    usuario: {
         apellidoMaterno: '',
         apellidoPaterno: '',
-        celular: '',
         ci: '',
         direccion: '',
         nombre: '',
@@ -22,17 +21,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
     isAutenticaicon: false,
     verificarAuth: async () => {
         try {
-            console.log('verificando login');
-
-            const response = await verificarLogin()
-            if (response) {
-                set({ user: response, isAutenticaicon: true })
+            const url = window.location.pathname
+            console.log(url);
+            if (url != '/') {
+                const response = await verificarLogin()
+                if (response) {
+                    set({ usuario: response, isAutenticaicon: true })
+                }
             }
 
+
         } catch (error) {
-            console.log(error);
-            
-            set({ user: null, isAutenticaicon: false })
+            set({ usuario: null, isAutenticaicon: false })
         }
 
     }

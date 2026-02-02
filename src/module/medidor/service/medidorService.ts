@@ -18,7 +18,7 @@ export async function editarMedidor(data: FormularioMedidorI, idMedidor: string)
 }
 
 
-export async function listarMedidorCliente(
+export async function listarMedidorClienteService(
   codigo: string,
   ci: string,
   nombre: string,

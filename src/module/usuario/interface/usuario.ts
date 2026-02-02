@@ -40,7 +40,6 @@ export interface UpdateUsuarioI {
 export interface UsuarioPerfilI {
   ci: string;
   nombre: string;
-  celular: string;
   apellidoMaterno: string;
   apellidoPaterno: string;
   usuario: string;

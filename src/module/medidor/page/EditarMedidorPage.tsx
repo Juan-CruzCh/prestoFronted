@@ -1,30 +1,31 @@
 import { useEffect, useState } from "react";
-import { useForm,  } from "react-hook-form";
+import { useForm, } from "react-hook-form";
 import { useParams } from "react-router";
 import type { ListarTarifasI } from "../../tarifa/interface/tarifa";
-import type { FormularioMedidorI, MedidorClienteI } from "../interface/medidor";
-import { obtenerMedidorPorId } from "../service/medidorService";
+import type { FormularioMedidorI } from "../interface/medidor";
+import { editarMedidor, obtenerMedidorPorId } from "../service/medidorService";
 import { listarTarifas } from "../../tarifa/service/tarifaService";
+import { ListarCliente } from "../../cliente/components/ListarCliente";
+import type { ListarClienteI } from "../../cliente/interface/cliente";
+import type { AxiosError } from "axios";
 
 
 
 export const EditarMedidorPage = () => {
-  const { id } = useParams(); // id del medidor
-  const [cliente, setCliente] = useState<MedidorClienteI>();
+  const { id } = useParams();
+  const [cliente, setCliente] = useState<ListarClienteI>();
   const [tarifas, setTarifas] = useState<ListarTarifasI[]>([]);
 
-  const { register, handleSubmit,  setValue, formState: { errors } } = useForm<FormularioMedidorI>({
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormularioMedidorI>({
     defaultValues: {
       cliente: "",
       numeroMedidor: "",
       descripcion: "",
       direccion: "",
-      fechaInstalacion: new Date(),
+      fechaInstalacion:'',
       tarifa: "",
     }
   });
-
-  // Cargar tarifas y medidor
   useEffect(() => {
     listarTodasLasTarifas();
     if (id) obtenerMedidor(id);
@@ -32,7 +33,7 @@ export const EditarMedidorPage = () => {
 
   const listarTodasLasTarifas = async () => {
     try {
-      const  data  = await listarTarifas()
+      const data = await listarTarifas()
       setTarifas(data);
     } catch (err) {
       console.error("Error al listar tarifas", err);
@@ -41,31 +42,27 @@ export const EditarMedidorPage = () => {
 
   const obtenerMedidor = async (id: string) => {
     try {
-      const  data  = await obtenerMedidorPorId(id)
-      
-      const medidor = data[0];
+      const data = await obtenerMedidorPorId(id)
 
+      const medidor = data[0];
       setCliente({
         _id: medidor.idCliente,
-        codigoCliente: medidor.codigoCliente,
+        codigo: medidor.codigoCliente,
         ci: medidor.ci,
         nombre: medidor.nombre,
         apellidoPaterno: medidor.apellidoPaterno,
         apellidoMaterno: medidor.apellidoMaterno,
-        descripcion:medidor.descripcion,
-        direccion:medidor.direccion,
-        fechaInstalacion:medidor.fechaInstalacion,
-        idCliente:medidor.idCliente,
-        numeroMedidor:medidor.numeroMedidor,
-        tarifa:medidor.tarifa
+        celular: '',
       });
-
+      const fecha = new Date(medidor.fechaInstalacion)
+  .toISOString()
+  .split("T")[0];
 
       setValue("cliente", medidor.idCliente);
       setValue("numeroMedidor", medidor.numeroMedidor);
       setValue("descripcion", medidor.descripcion);
       setValue("direccion", medidor.direccion);
-      setValue("fechaInstalacion", new Date(medidor.fechaInstalacion)); // formato yyyy-mm-dd
+      setValue("fechaInstalacion", fecha);
       setValue("tarifa", medidor.tarifa);
 
     } catch (err) {
@@ -75,23 +72,29 @@ export const EditarMedidorPage = () => {
 
   const onSubmit = async (data: FormularioMedidorI) => {
     try {
-      if (cliente) data.cliente = cliente._id;
-   
-      alert("Medidor editado correctamente");
+      if (cliente && id) {
+        data.cliente = cliente._id;
+        console.log(data);
+        
+       const response =   await editarMedidor(data, id)
+       console.log(response);
+       
+      }
+
     } catch (err) {
-      console.error("Error al editar medidor", err);
+      const e = err as AxiosError<any>
+      console.log(e.response);
+      
     }
   };
 
- 
+
   return (
     <div className="w-full p-4 bg-gray-50 min-h-screen">
       <div className="max-w-full mx-auto grid grid-cols-1 md:grid-cols-12 gap-4">
 
         <div className="col-span-8">
-          {/* Aquí colocarías tus componentes de selección/creación de cliente */}
-          {/* Ejemplo: <CrearClienteModal onClienteSeleccionado={seleccionarCliente} /> */}
-          {/* <ListarCliente onClienteSeleccionado={seleccionarCliente} /> */}
+          <ListarCliente onClienteSeleccionado={setCliente} />
         </div>
 
         <div className="md:col-span-4 order-2 md:order-2">
@@ -109,7 +112,7 @@ export const EditarMedidorPage = () => {
                   <div className="grid grid-cols-2 gap-x-4 gap-y-3">
                     <div>
                       <p className="text-xs text-gray-400 uppercase tracking-wide">Código</p>
-                      <p className="font-semibold text-gray-800">{cliente.codigoCliente}</p>
+                      <p className="font-semibold text-gray-800">{cliente.codigo}</p>
                     </div>
                     <div>
                       <p className="text-xs text-gray-400 uppercase tracking-wide">CI</p>

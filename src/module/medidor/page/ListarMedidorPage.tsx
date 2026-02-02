@@ -4,6 +4,8 @@ import axios from "axios";
 import type { ListarMedidorClientesI } from "../interface/medidor";
 import type { ListarTarifasI } from "../../tarifa/interface/tarifa";
 import { useNavigate } from "react-router";
+import { listarTarifas } from "../../tarifa/service/tarifaService";
+import { listarMedidorClienteService } from "../service/medidorService";
 
 
 
@@ -20,30 +22,28 @@ export const ListarMedidorPage = () => {
   const [tarifa, setTarifa] = useState("");
   const [estado, setEstado] = useState("");
   const [pagina, setPagina] = useState(1);
-  const [paginas, setPaginas] = useState(0);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     listarMedidorCliente();
-    listarTarifas();
+    tarifasListar();
   }, [pagina]);
 
   const listarMedidorCliente = async () => {
     try {
-      const { data } = await axios.get("/api/medidor", {
-        params: { codigo, ci, nombre, apellidoPaterno, apellidoMaterno, numeroMedidor, tarifa, estado, pagina },
-      });
+      const  data  = await listarMedidorClienteService(codigo, ci, nombre, apellidoPaterno, apellidoMaterno, numeroMedidor, tarifa, estado , "")
       setListarMedidorClientes(data.data);
-      setPaginas(data.paginas);
+
     } catch (err) {
+    
       console.error("Error al listar medidores", err);
     }
   };
 
-  const listarTarifas = async () => {
+  const tarifasListar = async () => {
     try {
-      const { data } = await axios.get("/api/tarifas");
+      const  data  = await listarTarifas();
       setTarifas(data);
     } catch (err) {
       console.error("Error al listar tarifas", err);

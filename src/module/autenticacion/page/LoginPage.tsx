@@ -1,6 +1,7 @@
 import { useForm, } from "react-hook-form";
 import { login } from "../service/autenticacionService";
 import type { AxiosError } from "axios";
+import { useNavigate } from "react-router";
 
 interface LoginFormInputs {
   usuario: string;
@@ -13,12 +14,15 @@ export const LoginPage = () => {
     handleSubmit,
     formState: { errors }
   } = useForm<LoginFormInputs>();
+ const navidate =  useNavigate()
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
       const response = await login(data.usuario, data.password)
+      console.log(response);
+      
       if (response.token) {
-        
+        navidate('/dashboard')
       }
     } catch (error) {
       const e = error as AxiosError<any>

@@ -13,13 +13,14 @@ export async function buscarMedidorCliente(numeroMedidor: string): Promise<Busca
 
 
 export async function registrarLectura(data: FormularioLecturaI): Promise<any> {
-  console.log(data);
   const response = await instance.post(`lectura`, data);
   return response.data;
 }
 
 
 export async function listarLecturasService(fechaInicio: string, fechaFin: string): Promise<ListarLecturaMedidorI[]> {
+  console.log(fechaInicio, fechaFin);
+  
   const response = await instance.post<ListarLecturaMedidorI[]>(`lectura/listar`, {
     fechaInicio,
     fechaFin
