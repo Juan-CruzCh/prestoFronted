@@ -9,7 +9,6 @@ import { buscarMedidorCliente, registrarLectura } from "../service/lecturaServic
 export const RealizarLecturaPage = () => {
     const navigate = useNavigate();
 
-    // ======= Estados =======
     const [numeroMedidor, setNumeroMedidor] = useState("");
     const [lecturaCliente, setLecturaCliente] = useState<BuscarMedidorClienteI>();
     const [error, setError] = useState("");

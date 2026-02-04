@@ -10,10 +10,11 @@ export async function listarClientes(
   nombre: string,
   apellidoPaterno: string,
   apellidoMaterno: string,
+  celular:string,
   pagina: number
 ): Promise<ResultadoHttp<ListarClienteI>> {
   const response = await instance.get<ResultadoHttp<ListarClienteI>>('cliente', {
-    params: { codigo, ci, nombre, apellidoPaterno, apellidoMaterno, pagina },
+    params: { codigo, ci, nombre, apellidoPaterno, apellidoMaterno, pagina, celular },
   });
   return response.data;
 }

@@ -4,7 +4,7 @@ import type { ResultadoHttp } from '../../../core/interface/ResultadoHttp';
 import type { buscarMedidorClienteI, PagoDetalleResponse, ListarPagos } from '../interface/pago';
 
 
-export async function buscarMedidorCliente(idCliente: string): Promise<buscarMedidorClienteI[]> {
+export async function lecturasPendientesPago(idCliente: string): Promise<buscarMedidorClienteI[]> {
   const response = await instance.get<buscarMedidorClienteI[]>(`lectura/medidor/cliente/${idCliente}`);
   return response.data;
 }
@@ -21,7 +21,7 @@ export async function realizarPago(
     lecturas: lecturas.map((item) => ({ lectura: item }))
   };
   const response = await instance.post('pago', payload);
-  return response;
+  return response.data;
 }
 
 

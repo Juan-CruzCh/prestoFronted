@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import type { buscarMedidorClienteI } from "../interface/pago";
 import { ListarCliente } from "../../cliente/components/ListarCliente";
 import type { ListarClienteI } from "../../cliente/interface/cliente";
 import { advertencia, confirmarPago, error } from "../../../core/utils/alertasUtils";
-import { realizarPago } from "../service/pagoService";
+import { lecturasPendientesPago, realizarPago } from "../service/pagoService";
 
 export const RealizarPagoPage = () => {
   const navigate = useNavigate();
@@ -49,12 +49,30 @@ export const RealizarPagoPage = () => {
     }
   };
 
-  /* ============================
-     REALIZAR PAGO
-  ============================ */
+
+  useEffect(() => {
+   
+    if (cliente) {
+
+      listarLecturasPendients(cliente._id)
+
+    }
+  }, [cliente])
+
+  const listarLecturasPendients = async (id: string) => {
+    try {
+      const response = await lecturasPendientesPago(id)
+    setLecturasCliente(response)
+    } catch (error) { 
+      console.log(error);
+      
+      
+    }
+  }
+
   const btnRealizarPago = async () => {
-    if (!cliente){
-    advertencia("Seleccione un cliente");
+    if (!cliente) {
+      advertencia("Seleccione un cliente");
       return;
     }
     if (lecturaSeleccionadas.length <= 0) {
@@ -71,7 +89,6 @@ export const RealizarPagoPage = () => {
         cliente._id,
         idMedidor
       );
-
       navigate(`/pago/detalle/${idPago}`);
     } catch {
       error("Ocurrió un error");
@@ -81,22 +98,18 @@ export const RealizarPagoPage = () => {
   return (
     <div className="min-h-screen py-10 px-4">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-        💳 Realizar Pago
+         Realizar Pago
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
 
         {/* CLIENTES */}
         <div className="lg:col-span-3">
-          <div className="border rounded-xl p-5 shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-700 mb-4">
-              👤 Clientes
-            </h3>
-
-            <div className="max-h-[600px] overflow-y-auto">
+          
+            
               <ListarCliente onClienteSeleccionado={setCliente} />
-            </div>
-          </div>
+           
+         
         </div>
 
         {/* MEDIDORES */}

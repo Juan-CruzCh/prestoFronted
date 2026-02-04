@@ -6,6 +6,7 @@ import type { ListarTarifasI } from "../../tarifa/interface/tarifa";
 import { useNavigate } from "react-router";
 import { listarTarifas } from "../../tarifa/service/tarifaService";
 import { listarMedidorClienteService } from "../service/medidorService";
+import { confirmarEliminar } from "../../../core/utils/alertasUtils";
 
 
 
@@ -23,8 +24,7 @@ export const ListarMorososPage = () => {
   const [estado, setEstado] = useState("");
   const [pagina, setPagina] = useState(1);
 
-  const navigate = useNavigate();
-
+  
   useEffect(() => {
     listarMedidorCliente();
     tarifasListar();
@@ -55,17 +55,7 @@ export const ListarMorososPage = () => {
     listarMedidorCliente();
   };
 
-  const eliminar = async (medidor: ListarMedidorClientesI) => {
-    const confirmacion = window.confirm(`¿Deseas eliminar el medidor ${medidor.numeroMedidor}?`);
-    if (!confirmacion) return;
-
-    try {
-      await axios.delete(`/api/medidor/${medidor._id}`);
-      listarMedidorCliente();
-    } catch (err) {
-      console.error("Ocurrió un error al eliminar el medidor", err);
-    }
-  };
+ 
 
   return (
     <div className="w-full h-full max-w-full mx-auto">

@@ -20,6 +20,7 @@ export function ListarCliente({ onClienteSeleccionado }: { onClienteSeleccionado
   const [nombre, setNombre] = useState('');
   const [apellidoPaterno, setApellidoPaterno] = useState('');
   const [apellidoMaterno, setApellidoMaterno] = useState('');
+  const [celular, setCelular] = useState('');
   const [pagina, setPagina] = useState(1);
   const [paginas, setPaginas] = useState(0);
   const [clientes, setClientes] = useState<ListarClienteI[]>([]);
@@ -27,21 +28,21 @@ export function ListarCliente({ onClienteSeleccionado }: { onClienteSeleccionado
 
   const { isReloading, triggerReload } = useEstadoReload()
   const listarClientes = async () => {
-
+   
     try {
       const response = await listarClientesService(
-        codigo, ci, nombre, apellidoPaterno, apellidoMaterno, pagina
+        codigo, ci, nombre, apellidoPaterno, apellidoMaterno, celular,pagina
       );
       setPaginas(response.paginas);
       setClientes(response.data);
     } catch (err) {
-      console.error('Error al listar clientes', err);
+      
     }
   };
 
   useEffect(() => {
     listarClientes();
-  }, [isReloading]);
+  }, [isReloading, codigo, ci, nombre, apellidoPaterno, apellidoMaterno, celular,pagina]);
 
   const handlePageChange = (newPage: number) => {
     setPagina(newPage);
@@ -53,8 +54,8 @@ export function ListarCliente({ onClienteSeleccionado }: { onClienteSeleccionado
     const confirmacion = await confirmarEliminar(cliente.nombre);
     if (!confirmacion) return;
     try {
-      const response=  await eliminarClienteService(cliente._id);
-      if(response.status == HttpStatus.OK){
+      const response = await eliminarClienteService(cliente._id);
+      if (response.status == HttpStatus.OK) {
         triggerReload()
       }
     } catch (err) {
@@ -73,18 +74,18 @@ export function ListarCliente({ onClienteSeleccionado }: { onClienteSeleccionado
       <h3 className="text-lg font-medium mb-3 text-gray-700">Clientes</h3>
       <div className="overflow-x-auto rounded-lg">
         <CrearClienteModal setCliente={onClienteSeleccionado} />
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 text-sm" >
           <thead className="bg-gray-100">
             <tr>
               <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Seleccionar</th>
               <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                Código Cliente
+                Cód. Cliente
                 <input
                   type="text"
                   placeholder="Buscar"
                   value={codigo}
                   onChange={(e) => setCodigo(e.target.value)}
-                  onInput={listarClientes}
+                  
                   className="mt-1 w-full p-1 border border-gray-300 rounded text-sm"
                 />
               </th>
@@ -95,7 +96,7 @@ export function ListarCliente({ onClienteSeleccionado }: { onClienteSeleccionado
                   placeholder="Buscar"
                   value={ci}
                   onChange={(e) => setCi(e.target.value)}
-                  onInput={listarClientes}
+
                   className="mt-1 w-full p-1 border border-gray-300 rounded text-sm"
                 />
               </th>
@@ -106,7 +107,7 @@ export function ListarCliente({ onClienteSeleccionado }: { onClienteSeleccionado
                   placeholder="Buscar"
                   value={nombre}
                   onChange={(e) => setNombre(e.target.value)}
-                  onInput={listarClientes}
+
                   className="mt-1 w-full p-1 border border-gray-300 rounded text-sm"
                 />
               </th>
@@ -117,7 +118,7 @@ export function ListarCliente({ onClienteSeleccionado }: { onClienteSeleccionado
                   placeholder="Buscar"
                   value={apellidoPaterno}
                   onChange={(e) => setApellidoPaterno(e.target.value)}
-                  onInput={listarClientes}
+
                   className="mt-1 w-full p-1 border border-gray-300 rounded text-sm"
                 />
               </th>
@@ -128,11 +129,21 @@ export function ListarCliente({ onClienteSeleccionado }: { onClienteSeleccionado
                   placeholder="Buscar"
                   value={apellidoMaterno}
                   onChange={(e) => setApellidoMaterno(e.target.value)}
-                  onInput={listarClientes}
+
                   className="mt-1 w-full p-1 border border-gray-300 rounded text-sm"
                 />
               </th>
-              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Celular</th>
+              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Celular
+
+                <input
+                  type="text"
+                  placeholder="Buscar"
+                  value={celular}
+                  onChange={(e) => setCelular(e.target.value)}
+
+                  className="mt-1 w-full p-1 border border-gray-300 rounded text-sm"
+                />
+              </th>
               <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Acción</th>
             </tr>
           </thead>
@@ -157,13 +168,13 @@ export function ListarCliente({ onClienteSeleccionado }: { onClienteSeleccionado
                 <td className="px-4 py-2 flex gap-2">
                   <button
                     onClick={() => handleEliminar(item)}
-                    className="bg-red-500 p-2 text-white rounded"
+                    className="bg-red-500 p-2 text-white rounded text-sm"
                   >
                     Eliminar
                   </button>
                   <button
                     onClick={() => handleActualizar(item)}
-                    className="bg-green-500 p-2 text-white rounded"
+                    className="bg-green-500 p-2 text-white rounded text-sm"
                   >
                     Actualizar
                   </button>

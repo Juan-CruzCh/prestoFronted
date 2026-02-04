@@ -47,9 +47,9 @@ export async function listarMedidorClienteService(
 }
 
 
-export async function eliminarMedidor(id: string): Promise<any> {
+export async function eliminarMedidor(id: string): Promise<AxiosResponse> {
   const response = await instance.delete<any>(`medidor/${id}`);
-  return response.data;
+  return response;
 }
 
 

@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import type { PagoDetalleResponse } from "../interface/pago";
 import { numeroATextoBolivianos } from "../../../core/utils/numeroTexto";
 import { detallePago } from "../service/pagoService";
-import '../style/detallePago.css'
+//import '../style/detallePago.css'
 
 import logEscudo from "../../../assets/logo/escudo.png";
 import logoPresto from "../../../assets/logo/logo.png";

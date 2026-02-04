@@ -5,12 +5,16 @@ import type { ListarMedidorClientesI } from "../interface/medidor";
 import type { ListarTarifasI } from "../../tarifa/interface/tarifa";
 import { useNavigate } from "react-router";
 import { listarTarifas } from "../../tarifa/service/tarifaService";
-import { listarMedidorClienteService } from "../service/medidorService";
+import { eliminarMedidor, listarMedidorClienteService } from "../service/medidorService";
+import { confirmarEliminar } from "../../../core/utils/alertasUtils";
+import { HttpStatus } from "../../../core/enum/httpSatatus";
+import { useEstadoReload } from "../../../core/utils/useEstadoReloadUtils";
 
 
 
 export const ListarMedidorPage = () => {
   const [listarMedidorClientes, setListarMedidorClientes] = useState<ListarMedidorClientesI[]>([]);
+    const { isReloading, triggerReload } = useEstadoReload()
   const [tarifas, setTarifas] = useState<ListarTarifasI[]>([]);
   const [codigo, setCodigo] = useState("");
   const [ci, setCi] = useState("");
@@ -28,7 +32,7 @@ export const ListarMedidorPage = () => {
   useEffect(() => {
     listarMedidorCliente();
     tarifasListar();
-  }, [pagina]);
+  }, [pagina, isReloading]);
 
   const listarMedidorCliente = async () => {
     try {
@@ -58,12 +62,14 @@ export const ListarMedidorPage = () => {
   };
 
   const eliminar = async (medidor: ListarMedidorClientesI) => {
-    const confirmacion = window.confirm(`¿Deseas eliminar el medidor ${medidor.numeroMedidor}?`);
+    const confirmacion = await confirmarEliminar(medidor.numeroMedidor);
     if (!confirmacion) return;
 
     try {
-      await axios.delete(`/api/medidor/${medidor._id}`);
-      listarMedidorCliente();
+      const response =  await eliminarMedidor(medidor._id);
+      if(response.status == HttpStatus.OK){
+        triggerReload()
+      }
     } catch (err) {
       console.error("Ocurrió un error al eliminar el medidor", err);
     }
